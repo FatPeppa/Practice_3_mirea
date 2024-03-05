@@ -64,16 +64,9 @@ public class FirstFragment extends Fragment {
         choose_the_amount_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (customer_introduction_input_text.getText().toString().length() > 0
-                        && !isNumeric(customer_introduction_input_text.getText().toString())) {
+                if (customer_introduction_input_text.getText().toString().length() == 0
+                        || !isNumeric(customer_introduction_input_text.getText().toString())) {
 
-                    Intent intent = new Intent(view.getContext(), Second_activity.class);
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    arrayList.add(customer_introduction_input_text.getText().toString());
-                    intent.putStringArrayListExtra("intent_from_first_activity", (ArrayList<String>) arrayList);
-
-                    mStartForResult.launch(intent);
-                } else {
                     customer_introduction_input_text.setText("");
                     customer_introduction_input_text.setHint(R.string.str_customer_introduction_hint);
                     customer_introduction_input_text.setHintTextColor(view.getContext().getColor(R.color.red));
@@ -84,36 +77,6 @@ public class FirstFragment extends Fragment {
         Toast.makeText(getActivity(), "onViewCreated", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onViewCreated");
     }
-
-    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-
-                    if(result.getResultCode() == Activity.RESULT_OK){
-                        Intent intent = result.getData();
-
-                        if (intent != null) {
-                            ArrayList<String> inputs = intent.getStringArrayListExtra("goods");
-
-                            if (inputs != null && checkInputs(inputs)){
-                                String goods_amount = parseInputsGoods(inputs, GoodParameterType.GOOD_AMOUNT);
-                                String good_name = parseInputsGoods(inputs, GoodParameterType.GOOD_NAME);
-
-                                order_list.setText(goods_amount);
-                                customer_introduction_input_text.setText(good_name);
-                            } else {
-                                Toast.makeText(getActivity(), "An intent error occurred", Toast.LENGTH_SHORT).show();
-                                Log.e(TAG, "Intent error occurred!!!");
-                            }
-                        }
-                    }
-                    else{
-                        Toast.makeText(getActivity(), "An intent error occurred", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Intent error occurred!!!");
-                    }
-                }
-            });
 
     private String parseInputsGoods(ArrayList<String> array, GoodParameterType type) {
         switch (type) {

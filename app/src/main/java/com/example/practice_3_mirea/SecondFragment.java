@@ -36,35 +36,11 @@ public class SecondFragment extends Fragment {
         TextView chosen_good = (TextView) view.findViewById(R.id.chosen_good);
         Button choose_the_amount_button = (Button) view.findViewById(R.id.choose_the_amount_button);
 
-        Intent intent = getActivity().getIntent();
-        ArrayList<String> inputs = intent.getStringArrayListExtra("intent_from_first_activity");
-
-        if (inputs != null && checkInputs(inputs)) {
-            String good_name = parseInputsGoods(inputs);
-
-            chosen_good.setText(good_name);
-        } else {
-            Toast.makeText(getActivity(), "An intent error occurred", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Intent error occurred!!!");
-        }
-
         choose_the_amount_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 String input_amount = input_the_amount_edit_text.getText().toString();
-                if (input_amount.length() != 0 && isNumeric(input_amount)) {
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    arrayList.add(input_amount);
-                    arrayList.add(chosen_good.getText().toString());
-
-                    Intent data = new Intent();
-                    data.putStringArrayListExtra("goods", (ArrayList<String>) arrayList);
-                    getActivity().setResult(RESULT_OK, data);
-                    getActivity().finish();
-
-                } else {
+                if (input_amount.length() == 0 || !isNumeric(input_amount)) {
                     input_the_amount_edit_text.setText("");
                     input_the_amount_edit_text.setHint(R.string.str_input_the_amount_hint);
                     input_the_amount_edit_text.setHintTextColor(view.getContext().getColor(R.color.red));
